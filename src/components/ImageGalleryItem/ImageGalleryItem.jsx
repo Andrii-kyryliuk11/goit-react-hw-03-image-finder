@@ -1,4 +1,3 @@
-import ShowModal from 'components/Modal/Modal';
 import css from './ImageGalleryItem.module.css';
 
 export const ImageGalleryItem = ({ data, toggleModal }) => {
