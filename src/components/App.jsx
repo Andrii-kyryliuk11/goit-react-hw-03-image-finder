@@ -60,7 +60,7 @@ export class App extends Component {
     if (loaderHidden === false) {
       loader = <Loader />;
     }
-    if (data.length > 12) {
+    if (data.length >= 12) {
       loadMore = (
         <Button getPage={this.getPage} toggleLoader={this.toggleLoader} />
       );
