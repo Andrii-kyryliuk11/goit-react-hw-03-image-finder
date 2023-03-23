@@ -10,31 +10,31 @@ export class App extends Component {
     data: [],
     searchValue: '',
     page: 1,
-    modalHidden: true,
+    modalHidden: false,
     largeImage: '',
-    loaderHidden: true,
+    showLoader: false,
   };
 
-  getSearchValue = value => {
+  updateSearchValue = value => {
     this.setState({ searchValue: value.trim() });
   };
 
-  getNewImages = data => {
+  updateNewImagesArray = data => {
     const images = data.hits;
     this.setState({ data: images });
     this.toggleLoader();
   };
 
-  getImages = data => {
+  updateImagesArray = data => {
     const images = data.hits;
 
-    this.setState({
-      data: [...this.state.data, ...images],
-    });
+    this.setState(prevState => ({
+      data: [...prevState.data, ...images],
+    }));
     this.toggleLoader();
   };
 
-  getPage = page => {
+  updatePage = page => {
     this.setState({ page: page });
   };
 
@@ -52,43 +52,29 @@ export class App extends Component {
   };
 
   render() {
-    const { data, largeImage, page, searchValue, modalHidden, loaderHidden } =
-      this.state;
-    let loadMore = null;
-    let modal = null;
-    let loader = null;
-    if (loaderHidden === false) {
-      loader = <Loader />;
-    }
-    if (data.length >= 12) {
-      loadMore = (
-        <Button getPage={this.getPage} toggleLoader={this.toggleLoader} />
-      );
-    }
+    const { data, largeImage, page, modalHidden, showLoader } = this.state;
 
-    if (modalHidden === false) {
-      modal = <Modal image={largeImage} toggleModal={this.toggleModal} />;
-    }
     return (
       <div>
         <Searchbar
-          getSearchValue={this.getSearchValue}
-          getImages={this.getImages}
-          getNewImages={this.getNewImages}
+          handleSearchValue={this.updateSearchValue}
+          handleImages={this.updateImagesArray}
+          handleNewImages={this.updateNewImagesArray}
           page={page}
           toggleLoader={this.toggleLoader}
         />
 
-        <ImageGallery
-          searchValue={searchValue}
-          data={data}
-          toggleModal={this.toggleModal}
-          toggleLoader={this.toggleLoader}
-          loaderHidden={this.state.loaderHidden}
-        />
-        {loadMore}
-        {modal}
-        {loader}
+        <ImageGallery data={data} toggleModal={this.toggleModal} />
+        {data.length >= 12 && (
+          <Button
+            handlePage={this.updatePage}
+            toggleLoader={this.toggleLoader}
+          />
+        )}
+        {modalHidden && (
+          <Modal image={largeImage} toggleModal={this.toggleModal} />
+        )}
+        {showLoader && <Loader />}
       </div>
     );
   }

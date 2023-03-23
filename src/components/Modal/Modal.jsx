@@ -11,25 +11,25 @@ export default class Modal extends Component {
   }
 
   handleKeyDown = e => {
+    const { toggleModal } = this.props;
     if (e.code === 'Escape') {
-      console.log(e.code);
-      this.props.toggleModal();
+      toggleModal();
     }
   };
 
   handleBackdropClick = e => {
+    const { toggleModal } = this.props;
     if (e.currentTarget === e.target) {
-      this.props.toggleModal();
-      console.log(e.target);
-      console.log(e.currentTarget);
+      toggleModal();
     }
   };
 
   render() {
+    const { image } = this.props;
     return (
       <div className={css.overlay} onClick={this.handleBackdropClick}>
         <div className={css.modal}>
-          <img src={this.props.image} alt="" />
+          <img src={image} alt="" />
         </div>
       </div>
     );

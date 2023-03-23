@@ -7,16 +7,19 @@ export class Button extends Component {
   };
 
   componentDidUpdate(prevProps, prevState) {
-    if (prevState.page !== this.state.page) {
-      this.props.getPage(this.state.page);
+    const { page } = this.state;
+    const { handlePage } = this.props;
+    if (prevState.page !== page) {
+      handlePage(page);
     }
   }
   render() {
+    const { toggleLoader } = this.props;
     return (
       <button
         type="button"
         onClick={() => {
-          this.props.toggleLoader();
+          toggleLoader();
           this.setState(prevState => {
             return {
               page: prevState.page + 1,

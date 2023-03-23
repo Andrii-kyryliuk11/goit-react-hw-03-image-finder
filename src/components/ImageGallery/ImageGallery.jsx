@@ -1,4 +1,4 @@
-import { ImageGalleryItem } from 'components/ImageGalleryItem/ImageGalleryItem';
+import { ImageGalleryItem } from 'components/ImageGallery/ImageGalleryItem/ImageGalleryItem';
 // import { ImageGalleryItem } from 'components/ImageGalleryItem/ImageGalleryItem';
 import { Component } from 'react';
 import css from './ImageGallery.module.css';
@@ -9,15 +9,13 @@ export class ImageGallery extends Component {
   };
 
   render() {
-    if (this.props.data) {
+    const { data, toggleModal } = this.props;
+    if (data) {
       return (
         <div>
-          {this.props.data && (
+          {data && (
             <ul className={css.imageGallery}>
-              <ImageGalleryItem
-                data={this.props.data}
-                toggleModal={this.props.toggleModal}
-              />
+              <ImageGalleryItem data={data} toggleModal={toggleModal} />
             </ul>
           )}
         </div>

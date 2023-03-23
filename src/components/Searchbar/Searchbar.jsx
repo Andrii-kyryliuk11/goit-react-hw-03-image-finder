@@ -1,6 +1,6 @@
 import { Component } from 'react';
 import css from './Searchbar.module.css';
-import searchImages from 'components/api/api';
+import searchImages from 'services/api';
 export class Searchbar extends Component {
   state = {
     data: [],
@@ -11,14 +11,15 @@ export class Searchbar extends Component {
 
   componentDidUpdate(prevProps, prevState) {
     if (prevProps.page !== this.props.page) {
-      const { searchValue } = this.state;
+      const { prevSearch } = this.state;
       const { page } = this.props;
-      searchImages(searchValue, page).then(res => this.props.getImages(res));
+      searchImages(prevSearch, page).then(res => this.props.handleImages(res));
     }
   }
 
   render() {
-    const { searchValue, page } = this.state;
+    const { searchValue, page, prevSearch } = this.state;
+    const { handleNewImages, toggleLoader } = this.props;
     return (
       <header className={css.searchbar}>
         <form
@@ -26,14 +27,14 @@ export class Searchbar extends Component {
           onSubmit={e => {
             e.preventDefault();
 
-            if (this.state.prevSearch !== searchValue && searchValue !== '')
+            if (prevSearch !== searchValue && searchValue !== '')
               searchImages(searchValue, page)
                 .then(res => {
-                  this.props.getNewImages(res);
+                  handleNewImages(res);
                 })
                 .catch(error => console.log(error))
                 .finally(() => {
-                  this.props.toggleLoader();
+                  toggleLoader();
                 });
 
             this.setState({ prevSearch: searchValue });
@@ -54,7 +55,7 @@ export class Searchbar extends Component {
             autoComplete="off"
             autoFocus
             placeholder="Search images and photos"
-            value={this.state.searchValue}
+            value={searchValue}
           />
         </form>
       </header>
